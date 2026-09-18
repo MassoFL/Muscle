@@ -41,6 +41,7 @@ const DEFAULT_STATE = { focus: "Pectoraux", target: 12, activeSession: [], histo
 let state = loadState();
 let libraryFilter = "Tous";
 let pendingFocus = state.focus;
+let selectedSessionMuscle = null;
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -51,7 +52,10 @@ const els = {
   finish: $("#finish-session-button"), suggestions: $("#suggestion-list"), history: $("#history-list"),
   weekStrip: $("#week-strip"), weekSessionCount: $("#week-session-count"), focusDialog: $("#focus-dialog"),
   libraryDialog: $("#library-dialog"), focusOptions: $("#focus-options"), targetInput: $("#target-input"),
-  libraryList: $("#library-list"), filters: $("#muscle-filters"), search: $("#exercise-search"), toast: $("#toast")
+  libraryList: $("#library-list"), filters: $("#muscle-filters"), search: $("#exercise-search"), toast: $("#toast"),
+  sessionBuilder: $("#session-builder-dialog"), muscleStep: $("#muscle-step"), movementStep: $("#movement-step"),
+  sessionMuscleOptions: $("#session-muscle-options"), movementOptions: $("#movement-options"),
+  builderEyebrow: $("#builder-eyebrow"), builderTitle: $("#builder-title"), addMore: $("#add-more-button")
 };
 
 function loadState() {
@@ -102,6 +106,7 @@ function renderSession() {
   els.exerciseCount.textContent = count;
   els.exerciseCount.parentElement.lastChild.textContent = ` EXERCICE${count > 1 ? "S" : ""}`;
   els.empty.hidden = count > 0;
+  els.addMore.hidden = count === 0;
   els.finish.disabled = count === 0;
   els.sessionList.innerHTML = state.activeSession.map((item) => `
     <article class="session-item" data-id="${item.entryId}">
@@ -166,6 +171,36 @@ function addExercise(id) {
   saveState(); showToast(`${exercise.name} ajouté`);
 }
 
+function openSessionBuilder() {
+  selectedSessionMuscle = null;
+  renderSessionBuilder();
+  els.sessionBuilder.showModal();
+}
+
+function renderSessionBuilder() {
+  const muscleChoices = [...MUSCLES, "Corps entier"];
+  const choosingMuscle = !selectedSessionMuscle;
+  els.muscleStep.hidden = !choosingMuscle;
+  els.movementStep.hidden = choosingMuscle;
+  els.builderEyebrow.textContent = choosingMuscle ? "ÉTAPE 1 SUR 2" : "ÉTAPE 2 SUR 2";
+  els.builderTitle.textContent = choosingMuscle ? "Quel muscle aujourd’hui ?" : `Mouvements · ${selectedSessionMuscle}`;
+
+  if (choosingMuscle) {
+    els.sessionMuscleOptions.innerHTML = muscleChoices.map((muscle) => {
+      const count = EXERCISES.filter((exercise) => exercise.muscle === muscle).length;
+      return `<button class="session-muscle-button${muscle === state.focus ? " focus-choice" : ""}" data-session-muscle="${muscle}" type="button"><strong>${muscle}</strong><small>${count} mouvement${count > 1 ? "s" : ""}</small></button>`;
+    }).join("");
+    return;
+  }
+
+  const activeIds = state.activeSession.map((item) => item.id);
+  const movements = EXERCISES.filter((exercise) => exercise.muscle === selectedSessionMuscle);
+  els.movementOptions.innerHTML = movements.map((exercise) => {
+    const isAdded = activeIds.includes(exercise.id);
+    return `<article class="movement-option${isAdded ? " is-added" : ""}"><div><strong>${exercise.name}</strong><small>${exercise.pattern} · ${exercise.equipment} · ${exercise.level}</small></div><button class="add-button" data-builder-add="${exercise.id}" aria-label="${isAdded ? `${exercise.name} déjà ajouté` : `Ajouter ${exercise.name}`}"${isAdded ? " disabled" : ""}>${isAdded ? "✓" : "+"}</button></article>`;
+  }).join("");
+}
+
 function renderFocusOptions() {
   els.focusOptions.innerHTML = MUSCLES.map((muscle) => `<button class="focus-option${pendingFocus === muscle ? " active" : ""}" type="button" data-focus="${muscle}">${muscle}</button>`).join("");
 }
@@ -188,6 +223,8 @@ document.addEventListener("click", (event) => {
   const remove = event.target.closest("[data-remove]"); if (remove) { state.activeSession = state.activeSession.filter((item) => item.entryId !== remove.dataset.remove); saveState(); }
   const focus = event.target.closest("[data-focus]"); if (focus) { pendingFocus = focus.dataset.focus; renderFocusOptions(); }
   const filter = event.target.closest("[data-filter]"); if (filter) { libraryFilter = filter.dataset.filter; renderFilters(); renderLibrary(); }
+  const sessionMuscle = event.target.closest("[data-session-muscle]"); if (sessionMuscle) { selectedSessionMuscle = sessionMuscle.dataset.sessionMuscle; renderSessionBuilder(); }
+  const builderAdd = event.target.closest("[data-builder-add]"); if (builderAdd) { addExercise(builderAdd.dataset.builderAdd); renderSessionBuilder(); }
 });
 
 els.sessionList.addEventListener("change", (event) => {
@@ -201,6 +238,11 @@ $("#focus-form").addEventListener("submit", (event) => {
   event.preventDefault(); state.focus = pendingFocus; state.target = Math.max(4, Math.min(30, Number(els.targetInput.value) || 12)); saveState(); els.focusDialog.close(); showToast("Objectif hebdomadaire mis à jour");
 });
 $("#refresh-suggestions").addEventListener("click", () => { state.suggestionSeed += 1; saveState(); });
+$("#start-session-button").addEventListener("click", openSessionBuilder);
+els.addMore.addEventListener("click", openSessionBuilder);
+$("#close-session-builder").addEventListener("click", () => els.sessionBuilder.close());
+$("#back-to-muscles").addEventListener("click", () => { selectedSessionMuscle = null; renderSessionBuilder(); });
+$("#finish-adding-button").addEventListener("click", () => els.sessionBuilder.close());
 $("#open-library-button").addEventListener("click", () => { renderFilters(); renderLibrary(); els.libraryDialog.showModal(); els.search.focus(); });
 $("#close-library-button").addEventListener("click", () => els.libraryDialog.close());
 els.search.addEventListener("input", renderLibrary);

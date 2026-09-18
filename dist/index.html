@@ -62,11 +62,20 @@
               <div class="empty-icon" aria-hidden="true">
                 <svg viewBox="0 0 48 48"><path d="M10 20h7v-6h6v20h-6v-6h-7v-8Zm28 0h-7v-6h-6v20h6v-6h7v-8ZM23 22h2v4h-2z"/></svg>
               </div>
-              <h3>Commence par un mouvement</h3>
-              <p>Choisis une suggestion ou explore la bibliothèque. Tu peux en ajouter autant que tu veux.</p>
+              <h3>Prêt pour ta séance ?</h3>
+              <p>Choisis d’abord un muscle, puis les mouvements que tu veux travailler aujourd’hui.</p>
+              <button class="primary-button empty-action" id="start-session-button" type="button">
+                Commencer une séance
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+              </button>
             </div>
 
             <div id="session-list" class="session-list" aria-live="polite"></div>
+
+            <button class="secondary-button add-more-button" id="add-more-button" type="button" hidden>
+              <span aria-hidden="true">＋</span>
+              Ajouter un exercice
+            </button>
 
             <button class="primary-button" id="finish-session-button" type="button" disabled>
               Terminer la séance
@@ -121,6 +130,34 @@
         </label>
         <button class="primary-button" value="default" type="submit">Enregistrer l’objectif</button>
       </form>
+    </dialog>
+
+    <dialog id="session-builder-dialog" class="modal session-builder-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <span class="eyebrow" id="builder-eyebrow">ÉTAPE 1 SUR 2</span>
+            <h2 id="builder-title">Quel muscle aujourd’hui ?</h2>
+          </div>
+          <button class="icon-button subtle" id="close-session-builder" aria-label="Fermer" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+          </button>
+        </div>
+
+        <div id="muscle-step" class="builder-step">
+          <p class="modal-intro">Tu pourras ajouter autant de mouvements et de muscles que tu veux.</p>
+          <div id="session-muscle-options" class="session-muscle-options"></div>
+        </div>
+
+        <div id="movement-step" class="builder-step" hidden>
+          <button class="back-button" id="back-to-muscles" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            Changer de muscle
+          </button>
+          <div id="movement-options" class="movement-options"></div>
+          <button class="primary-button builder-done" id="finish-adding-button" type="button">J’ai fini d’ajouter</button>
+        </div>
+      </div>
     </dialog>
 
     <dialog id="library-dialog" class="modal library-modal">
