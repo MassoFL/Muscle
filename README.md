@@ -22,6 +22,10 @@ python3 -m http.server 4173 --directory dist
 
 Puis ouvrir [http://localhost:4173](http://localhost:4173).
 
+## Déployer sur Vercel
+
+Le fichier `vercel.json` configure automatiquement `dist` comme dossier public. Connecter le dépôt à Vercel avec le preset **Other** et sans commande de build ; chaque push sur `main` déclenchera ensuite un nouveau déploiement.
+
 ## Structure
 
 ```text
