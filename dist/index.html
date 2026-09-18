@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0d0e10" />
+    <meta
+      name="description"
+      content="Repère — planificateur minimaliste de séances de musculation avec focus musculaire hebdomadaire."
+    />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23dfff00'/%3E%3Cpath d='M13 27h8v-6h7v22h-7v-6h-8V27Zm38 0h-8v-6h-7v22h7v-6h8V27ZM28 29h8v6h-8z' fill='%230d0e10'/%3E%3C/svg%3E" />
+    <title>Repère — suivi musculation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Repère, accueil">
+          <span class="brand-mark" aria-hidden="true">R</span>
+          <span>REPÈRE</span>
+        </a>
+        <div class="week-meta">
+          <span class="eyebrow">SEMAINE EN COURS</span>
+          <strong id="week-label"></strong>
+        </div>
+        <button class="icon-button" id="reset-button" type="button" title="Réinitialiser les données" aria-label="Réinitialiser les données">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66L20 8.68M20 4v4.68h-4.68"/></svg>
+        </button>
+      </header>
+
+      <main>
+        <section class="focus-card" aria-labelledby="focus-title">
+          <div class="focus-copy">
+            <span class="eyebrow">FOCUS HEBDOMADAIRE</span>
+            <div class="focus-heading-row">
+              <h1 id="focus-title"><span id="focus-muscle">Pectoraux</span><span class="accent-dot">.</span></h1>
+              <button class="text-button" id="change-focus-button" type="button">Changer</button>
+            </div>
+            <p>Construis ta semaine autour d’un muscle, sans négliger le reste.</p>
+          </div>
+          <div class="focus-progress">
+            <div class="progress-number"><strong id="sets-done">0</strong><span>/</span><span id="sets-target">12</span></div>
+            <span class="progress-caption">SÉRIES FOCUS</span>
+            <div class="progress-track" aria-hidden="true"><span id="progress-bar"></span></div>
+          </div>
+        </section>
+
+        <div class="workspace-grid">
+          <section class="session-panel" aria-labelledby="session-title">
+            <div class="section-heading">
+              <div>
+                <span class="eyebrow">AUJOURD’HUI · <span id="today-label"></span></span>
+                <h2 id="session-title">Ma séance</h2>
+              </div>
+              <span class="count-label"><strong id="exercise-count">0</strong> EXERCICE</span>
+            </div>
+
+            <div id="session-empty" class="empty-state">
+              <div class="empty-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48"><path d="M10 20h7v-6h6v20h-6v-6h-7v-8Zm28 0h-7v-6h-6v20h6v-6h7v-8ZM23 22h2v4h-2z"/></svg>
+              </div>
+              <h3>Commence par un mouvement</h3>
+              <p>Choisis une suggestion ou explore la bibliothèque. Tu peux en ajouter autant que tu veux.</p>
+            </div>
+
+            <div id="session-list" class="session-list" aria-live="polite"></div>
+
+            <button class="primary-button" id="finish-session-button" type="button" disabled>
+              Terminer la séance
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </section>
+
+          <aside class="suggestions-panel" aria-labelledby="suggestions-title">
+            <div class="section-heading compact">
+              <div>
+                <span class="eyebrow">POUR VARIER CETTE SEMAINE</span>
+                <h2 id="suggestions-title">Suggestions</h2>
+              </div>
+              <button class="icon-button subtle" id="refresh-suggestions" type="button" aria-label="Nouvelles suggestions" title="Nouvelles suggestions">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66L20 8.68M20 4v4.68h-4.68"/></svg>
+              </button>
+            </div>
+            <div id="suggestion-list" class="suggestion-list"></div>
+            <button class="secondary-button" id="open-library-button" type="button">
+              Voir toute la bibliothèque
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </aside>
+        </div>
+
+        <section class="history-section" aria-labelledby="history-title">
+          <div class="section-heading compact">
+            <div>
+              <span class="eyebrow">TON RYTHME</span>
+              <h2 id="history-title">Cette semaine</h2>
+            </div>
+            <strong id="week-session-count" class="history-total">0 séance</strong>
+          </div>
+          <div id="week-strip" class="week-strip"></div>
+          <div id="history-list" class="history-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="focus-dialog" class="modal">
+      <form method="dialog" class="modal-card" id="focus-form">
+        <div class="modal-header">
+          <div><span class="eyebrow">OBJECTIF DE LA SEMAINE</span><h2>Choisis ton focus</h2></div>
+          <button class="icon-button subtle" value="cancel" aria-label="Fermer" type="submit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+          </button>
+        </div>
+        <p class="modal-intro">Ce muscle sera prioritaire dans les suggestions. Les autres groupes restent disponibles.</p>
+        <div id="focus-options" class="focus-options"></div>
+        <label class="target-field">Objectif de séries hebdomadaires
+          <input id="target-input" type="number" min="4" max="30" step="1" value="12" />
+        </label>
+        <button class="primary-button" value="default" type="submit">Enregistrer l’objectif</button>
+      </form>
+    </dialog>
+
+    <dialog id="library-dialog" class="modal library-modal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div><span class="eyebrow">34 MOUVEMENTS</span><h2>Bibliothèque</h2></div>
+          <button class="icon-button subtle" id="close-library-button" aria-label="Fermer" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+          </button>
+        </div>
+        <div class="library-controls">
+          <label class="search-field">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+            <input id="exercise-search" type="search" placeholder="Rechercher un exercice…" />
+          </label>
+          <div id="muscle-filters" class="filter-row"></div>
+        </div>
+        <div id="library-list" class="library-list"></div>
+      </div>
+    </dialog>
+
+    <dialog id="confirm-dialog" class="modal confirm-modal">
+      <form method="dialog" class="modal-card">
+        <span class="eyebrow">CONFIRMATION</span>
+        <h2>Effacer toutes les données ?</h2>
+        <p class="modal-intro">Tes séances, ton objectif et ta progression seront supprimés de ce navigateur.</p>
+        <div class="confirm-actions">
+          <button class="secondary-button" value="cancel">Annuler</button>
+          <button class="danger-button" id="confirm-reset" value="default">Tout effacer</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
