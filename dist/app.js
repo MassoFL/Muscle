@@ -110,12 +110,15 @@ function renderSession() {
   els.finish.disabled = count === 0;
   els.sessionList.innerHTML = state.activeSession.map((item) => `
     <article class="session-item" data-id="${item.entryId}">
-      <div>
-        <div class="session-item-title"><strong>${item.name}</strong><span class="muscle-tag">${item.muscle}</span></div>
-        <div class="set-controls">
-          <label class="mini-field">SÉRIES<input data-field="sets" type="number" min="1" max="12" value="${item.sets}"></label>
-          <label class="mini-field">RÉPÉTITIONS<input data-field="reps" type="text" maxlength="8" value="${item.reps}" placeholder="8–12"></label>
-          <label class="mini-field">CHARGE KG<input data-field="weight" type="number" min="0" step="0.5" value="${item.weight}"></label>
+      <div class="session-item-body">
+        <img class="session-thumb" src="assets/exercises/${item.id}.jpg" alt="Illustration : ${item.name}" loading="lazy">
+        <div>
+          <div class="session-item-title"><strong>${item.name}</strong><span class="muscle-tag">${item.muscle}</span></div>
+          <div class="set-controls">
+            <label class="mini-field">SÉRIES<input data-field="sets" type="number" min="1" max="12" value="${item.sets}"></label>
+            <label class="mini-field">RÉPÉTITIONS<input data-field="reps" type="text" maxlength="8" value="${item.reps}" placeholder="8–12"></label>
+            <label class="mini-field">CHARGE KG<input data-field="weight" type="number" min="0" step="0.5" value="${item.weight}"></label>
+          </div>
         </div>
       </div>
       <button class="remove-button" data-remove="${item.entryId}" aria-label="Retirer ${item.name}"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
@@ -142,7 +145,7 @@ function renderSuggestions() {
   const list = getSuggestions();
   els.suggestions.innerHTML = list.map((item, index) => `
     <article class="suggestion-card">
-      <span class="movement-index">0${index + 1}</span>
+      <div class="exercise-thumb-wrap"><img src="assets/exercises/${item.id}.jpg" alt="" loading="lazy"><span>0${index + 1}</span></div>
       <div><strong>${item.name}</strong><small>${item.muscle} · ${item.pattern}</small></div>
       <button class="add-button" data-add="${item.id}" aria-label="Ajouter ${item.name}">+</button>
     </article>`).join("");
@@ -197,7 +200,7 @@ function renderSessionBuilder() {
   const movements = EXERCISES.filter((exercise) => exercise.muscle === selectedSessionMuscle);
   els.movementOptions.innerHTML = movements.map((exercise) => {
     const isAdded = activeIds.includes(exercise.id);
-    return `<article class="movement-option${isAdded ? " is-added" : ""}"><div><strong>${exercise.name}</strong><small>${exercise.pattern} · ${exercise.equipment} · ${exercise.level}</small></div><button class="add-button" data-builder-add="${exercise.id}" aria-label="${isAdded ? `${exercise.name} déjà ajouté` : `Ajouter ${exercise.name}`}"${isAdded ? " disabled" : ""}>${isAdded ? "✓" : "+"}</button></article>`;
+    return `<article class="movement-option${isAdded ? " is-added" : ""}"><img src="assets/exercises/${exercise.id}.jpg" alt="Illustration : ${exercise.name}" loading="lazy"><div><strong>${exercise.name}</strong><small>${exercise.pattern} · ${exercise.equipment} · ${exercise.level}</small></div><button class="add-button" data-builder-add="${exercise.id}" aria-label="${isAdded ? `${exercise.name} déjà ajouté` : `Ajouter ${exercise.name}`}"${isAdded ? " disabled" : ""}>${isAdded ? "✓" : "+"}</button></article>`;
   }).join("");
 }
 
@@ -208,7 +211,7 @@ function renderFocusOptions() {
 function renderLibrary() {
   const query = els.search.value.trim().toLocaleLowerCase("fr");
   const results = EXERCISES.filter((item) => (libraryFilter === "Tous" || item.muscle === libraryFilter) && `${item.name} ${item.muscle} ${item.equipment}`.toLocaleLowerCase("fr").includes(query));
-  els.libraryList.innerHTML = results.map((item) => `<article class="library-item"><div><strong>${item.name}</strong><small>${item.muscle} · ${item.equipment} · ${item.level}</small></div><button class="add-button" data-add="${item.id}" aria-label="Ajouter ${item.name}">+</button></article>`).join("") || `<p class="modal-intro">Aucun exercice ne correspond à cette recherche.</p>`;
+  els.libraryList.innerHTML = results.map((item) => `<article class="library-item"><img src="assets/exercises/${item.id}.jpg" alt="Illustration : ${item.name}" loading="lazy"><div><strong>${item.name}</strong><small>${item.muscle} · ${item.equipment} · ${item.level}</small></div><button class="add-button" data-add="${item.id}" aria-label="Ajouter ${item.name}">+</button></article>`).join("") || `<p class="modal-intro">Aucun exercice ne correspond à cette recherche.</p>`;
 }
 
 function renderFilters() {

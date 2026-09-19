@@ -43,6 +43,7 @@ La structure de la bibliothèque et les repères de pratique s’appuient sur :
 - [ACE Exercise Library](https://www.acefitness.org/resources/everyone/exercise-library/) — catégories par zone, équipement et niveau ;
 - [NHS — How to improve your strength and flexibility](https://www.nhs.uk/live-well/exercise/how-to-improve-strength-flexibility/) — grands groupes musculaires, fréquence et repères séries/répétitions ;
 - [NHS — Strength and Flex exercise plan](https://www.nhs.uk/live-well/exercise/strength-and-flex-exercise-plan-how-to-videos/) — exemples de mouvements et rappel de sécurité.
+- [Free Exercise DB](https://github.com/yuhonas/free-exercise-db) — photographies des mouvements, distribuées dans le domaine public.
 
 Cette application ne remplace pas l’avis d’un professionnel de santé ou d’un coach qualifié.
 
