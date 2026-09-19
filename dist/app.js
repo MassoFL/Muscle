@@ -37,7 +37,7 @@ const EXERCISES = [
 
 const MUSCLES = ["Pectoraux", "Dos", "Quadriceps", "Ischio-jambiers", "Fessiers", "Épaules", "Bras", "Abdominaux"];
 const STORAGE_KEY = "repere-workout-v1";
-const DEFAULT_STATE = { focus: "Pectoraux", target: 12, activeSession: [], history: [], suggestionSeed: 0 };
+const DEFAULT_STATE = { focus: "Pectoraux", target: 4, activeSession: [], history: [], suggestionSeed: 0, trackingMode: "pr" };
 let state = loadState();
 let libraryFilter = "Tous";
 let pendingFocus = state.focus;
@@ -47,7 +47,7 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 const els = {
   weekLabel: $("#week-label"), todayLabel: $("#today-label"), focusMuscle: $("#focus-muscle"),
-  setsDone: $("#sets-done"), setsTarget: $("#sets-target"), progressBar: $("#progress-bar"),
+  focusDone: $("#focus-done"), focusTarget: $("#focus-target"), progressBar: $("#progress-bar"),
   exerciseCount: $("#exercise-count"), empty: $("#session-empty"), sessionList: $("#session-list"),
   finish: $("#finish-session-button"), suggestions: $("#suggestion-list"), history: $("#history-list"),
   weekStrip: $("#week-strip"), weekSessionCount: $("#week-session-count"), focusDialog: $("#focus-dialog"),
@@ -59,7 +59,16 @@ const els = {
 };
 
 function loadState() {
-  try { return { ...DEFAULT_STATE, ...JSON.parse(localStorage.getItem(STORAGE_KEY)) }; }
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    const saved = { ...DEFAULT_STATE, ...parsed };
+    if (parsed?.trackingMode !== "pr") {
+      saved.target = 4;
+      saved.trackingMode = "pr";
+      saved.activeSession = (saved.activeSession || []).map(({ sets, ...item }) => ({ ...item, reps: parseInt(item.reps, 10) || 8, weight: item.weight || "" }));
+    }
+    return saved;
+  }
   catch { return { ...DEFAULT_STATE }; }
 }
 
@@ -78,10 +87,25 @@ function isThisWeek(dateValue) {
   const date = new Date(dateValue); return date >= start && date < end;
 }
 
-function getFocusSets() {
+function getFocusProgress() {
   return state.history.filter((session) => isThisWeek(session.date)).reduce((sum, session) => {
-    return sum + session.exercises.filter((item) => item.muscle === state.focus).reduce((n, item) => n + Number(item.sets || 0), 0);
+    return sum + session.exercises.filter((item) => item.muscle === state.focus).length;
   }, 0);
+}
+
+function getExercisePR(exerciseId) {
+  const performances = state.history.flatMap((session) => session.exercises || []).filter((item) => item.id === exerciseId && Number(item.weight) > 0);
+  if (!performances.length) return null;
+  return performances.reduce((best, item) => {
+    const weight = Number(item.weight);
+    const reps = parseInt(item.reps, 10) || 0;
+    if (!best || weight > best.weight || (weight === best.weight && reps > best.reps)) return { weight, reps };
+    return best;
+  }, null);
+}
+
+function formatWeight(weight) {
+  return Number.isInteger(Number(weight)) ? String(Number(weight)) : Number(weight).toFixed(1).replace(".", ",");
 }
 
 function formatDates() {
@@ -93,11 +117,11 @@ function formatDates() {
 
 function render() {
   formatDates();
-  const focusSets = getFocusSets();
+  const focusProgress = getFocusProgress();
   els.focusMuscle.textContent = state.focus;
-  els.setsDone.textContent = focusSets;
-  els.setsTarget.textContent = state.target;
-  els.progressBar.style.width = `${Math.min(100, (focusSets / state.target) * 100)}%`;
+  els.focusDone.textContent = focusProgress;
+  els.focusTarget.textContent = state.target;
+  els.progressBar.style.width = `${Math.min(100, (focusProgress / state.target) * 100)}%`;
   renderSession(); renderSuggestions(); renderHistory();
 }
 
@@ -108,21 +132,31 @@ function renderSession() {
   els.empty.hidden = count > 0;
   els.addMore.hidden = count === 0;
   els.finish.disabled = count === 0;
-  els.sessionList.innerHTML = state.activeSession.map((item) => `
+  els.sessionList.innerHTML = state.activeSession.map((item) => {
+    const previousPR = getExercisePR(item.id);
+    const currentWeight = Number(item.weight) || 0;
+    const isNewPR = currentWeight > 0 && (!previousPR || currentWeight > previousPR.weight);
+    const prLabel = isNewPR
+      ? `Nouveau PR potentiel · ${formatWeight(currentWeight)} kg`
+      : previousPR
+        ? `PR actuel · ${formatWeight(previousPR.weight)} kg × ${previousPR.reps}`
+        : "Aucun PR enregistré";
+    return `
     <article class="session-item" data-id="${item.entryId}">
       <div class="session-item-body">
         <img class="session-thumb" src="assets/exercises/${item.id}.jpg" alt="Illustration : ${item.name}" loading="lazy">
         <div>
           <div class="session-item-title"><strong>${item.name}</strong><span class="muscle-tag">${item.muscle}</span></div>
           <div class="set-controls">
-            <label class="mini-field">SÉRIES<input data-field="sets" type="number" min="1" max="12" value="${item.sets}"></label>
-            <label class="mini-field">RÉPÉTITIONS<input data-field="reps" type="text" maxlength="8" value="${item.reps}" placeholder="8–12"></label>
-            <label class="mini-field">CHARGE KG<input data-field="weight" type="number" min="0" step="0.5" value="${item.weight}"></label>
+            <label class="mini-field">RÉPÉTITIONS<input data-field="reps" type="number" min="1" max="100" step="1" value="${item.reps}" placeholder="8"></label>
+            <label class="mini-field">CHARGE MAX KG<input data-field="weight" type="number" min="0" step="0.5" value="${item.weight}" placeholder="0"></label>
           </div>
+          <span class="pr-reference${isNewPR ? " new-pr" : ""}">${prLabel}</span>
         </div>
       </div>
       <button class="remove-button" data-remove="${item.entryId}" aria-label="Retirer ${item.name}"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
-    </article>`).join("");
+    </article>`;
+  }).join("");
 }
 
 function recentExerciseIds() {
@@ -162,15 +196,17 @@ function renderHistory() {
     return `<div class="day-cell${done ? " done" : ""}${today ? " today" : ""}"><span>${new Intl.DateTimeFormat("fr-FR", { weekday: "short" }).format(date).slice(0,2).toUpperCase()}</span><strong>${date.getDate()}</strong></div>`;
   }).join("");
   els.history.innerHTML = weekly.slice().reverse().map((session) => {
-    const totalSets = session.exercises.reduce((sum, item) => sum + Number(item.sets), 0);
     const exerciseLabel = `${session.exercises.length} exercice${session.exercises.length > 1 ? "s" : ""}`;
-    return `<div class="history-row"><strong>${new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric" }).format(new Date(session.date))}</strong><span>${exerciseLabel} · ${totalSets} séries</span></div>`;
+    const maxWeight = Math.max(0, ...session.exercises.map((item) => Number(item.weight) || 0));
+    const performanceLabel = maxWeight > 0 ? ` · ${formatWeight(maxWeight)} kg max` : "";
+    return `<div class="history-row"><strong>${new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric" }).format(new Date(session.date))}</strong><span>${exerciseLabel}${performanceLabel}</span></div>`;
   }).join("");
 }
 
 function addExercise(id) {
   const exercise = EXERCISES.find((item) => item.id === id); if (!exercise) return;
-  state.activeSession.push({ ...exercise, entryId: `${id}-${Date.now()}`, sets: 3, reps: "8–12", weight: "" });
+  const previousPR = getExercisePR(id);
+  state.activeSession.push({ ...exercise, entryId: `${id}-${Date.now()}`, reps: previousPR?.reps || 8, weight: previousPR?.weight || "" });
   saveState(); showToast(`${exercise.name} ajouté`);
 }
 
@@ -232,13 +268,13 @@ document.addEventListener("click", (event) => {
 
 els.sessionList.addEventListener("change", (event) => {
   const card = event.target.closest("[data-id]"); const item = state.activeSession.find((entry) => entry.entryId === card?.dataset.id);
-  if (item && event.target.dataset.field) { item[event.target.dataset.field] = event.target.value; localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  if (item && event.target.dataset.field) { item[event.target.dataset.field] = event.target.value; localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); renderSession(); }
 });
 
 $("#change-focus-button").addEventListener("click", () => { pendingFocus = state.focus; els.targetInput.value = state.target; renderFocusOptions(); els.focusDialog.showModal(); });
 $("#focus-form").addEventListener("submit", (event) => {
   if (event.submitter?.value === "cancel") return;
-  event.preventDefault(); state.focus = pendingFocus; state.target = Math.max(4, Math.min(30, Number(els.targetInput.value) || 12)); saveState(); els.focusDialog.close(); showToast("Objectif hebdomadaire mis à jour");
+  event.preventDefault(); state.focus = pendingFocus; state.target = Math.max(1, Math.min(20, Number(els.targetInput.value) || 4)); saveState(); els.focusDialog.close(); showToast("Objectif hebdomadaire mis à jour");
 });
 $("#refresh-suggestions").addEventListener("click", () => { state.suggestionSeed += 1; saveState(); });
 $("#start-session-button").addEventListener("click", openSessionBuilder);
@@ -250,8 +286,9 @@ $("#open-library-button").addEventListener("click", () => { renderFilters(); ren
 $("#close-library-button").addEventListener("click", () => els.libraryDialog.close());
 els.search.addEventListener("input", renderLibrary);
 els.finish.addEventListener("click", () => {
+  const hasNewPR = state.activeSession.some((item) => Number(item.weight) > 0 && (!getExercisePR(item.id) || Number(item.weight) > getExercisePR(item.id).weight));
   const session = { id: `session-${Date.now()}`, date: new Date().toISOString(), exercises: state.activeSession.map((item) => ({ ...item })) };
-  state.history.push(session); state.activeSession = []; state.suggestionSeed += 1; saveState(); showToast("Séance enregistrée — beau travail");
+  state.history.push(session); state.activeSession = []; state.suggestionSeed += 1; saveState(); showToast(hasNewPR ? "Séance enregistrée · nouveau PR !" : "Séance enregistrée — beau travail");
 });
 $("#reset-button").addEventListener("click", () => $("#confirm-dialog").showModal());
 $("#confirm-reset").addEventListener("click", () => { state = { ...DEFAULT_STATE, activeSession: [], history: [] }; localStorage.removeItem(STORAGE_KEY); setTimeout(render, 0); });
@@ -259,7 +296,7 @@ $("#confirm-reset").addEventListener("click", () => { state = { ...DEFAULT_STATE
 function registerWebMCP() {
   const context = document.modelContext; if (!context?.registerTool) return;
   const register = (tool) => { try { Promise.resolve(context.registerTool(tool)).catch(() => {}); } catch {} };
-  register({ name: "get_weekly_workout_status", title: "Lire la progression de la semaine", description: "Retourne le muscle focus, l’objectif, les séries terminées et le nombre de séances de la semaine.", inputSchema: { type: "object", properties: {}, additionalProperties: false }, annotations: { readOnlyHint: true, untrustedContentHint: false }, execute: () => ({ focus: state.focus, targetSets: state.target, completedSets: getFocusSets(), sessions: state.history.filter((s) => isThisWeek(s.date)).length }) });
+  register({ name: "get_weekly_workout_status", title: "Lire la progression de la semaine", description: "Retourne le muscle focus, l’objectif d’exercices et le nombre de séances de la semaine.", inputSchema: { type: "object", properties: {}, additionalProperties: false }, annotations: { readOnlyHint: true, untrustedContentHint: false }, execute: () => ({ focus: state.focus, targetExercises: state.target, completedExercises: getFocusProgress(), sessions: state.history.filter((s) => isThisWeek(s.date)).length }) });
   register({ name: "add_exercise_to_session", title: "Ajouter un exercice", description: "Ajoute un exercice de la bibliothèque à la séance active à partir de son identifiant.", inputSchema: { type: "object", properties: { exerciseId: { type: "string", enum: EXERCISES.map((item) => item.id) } }, required: ["exerciseId"], additionalProperties: false }, annotations: { readOnlyHint: false, untrustedContentHint: false }, execute: ({ exerciseId }) => { const exercise = EXERCISES.find((item) => item.id === exerciseId); if (!exercise) throw new Error("Exercice inconnu"); addExercise(exerciseId); return { added: exercise.name, activeExerciseCount: state.activeSession.length }; } });
 }
 

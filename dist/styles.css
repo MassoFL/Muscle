@@ -104,7 +104,9 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round
 .muscle-tag { color: var(--accent); font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .set-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 13px; }
 .mini-field { display: grid; gap: 4px; color: var(--muted); font-size: .65rem; font-weight: 700; letter-spacing: .08em; }
-.mini-field input { width: 80px; min-height: 35px; padding: 6px 8px; border: 1px solid #34383c; border-radius: 6px; background: #111315; color: var(--text); }
+.mini-field input { width: 110px; min-height: 35px; padding: 6px 8px; border: 1px solid #34383c; border-radius: 6px; background: #111315; color: var(--text); }
+.pr-reference { display: inline-flex; align-items: center; min-height: 24px; margin-top: 11px; padding: 4px 8px; border: 1px solid #373b3f; border-radius: 5px; color: var(--muted); font-size: .72rem; font-weight: 600; }
+.pr-reference.new-pr { border-color: var(--accent); background: rgba(223,255,0,.08); color: var(--accent); }
 .remove-button { width: 31px; height: 31px; padding: 0; border: 0; background: transparent; color: #777d81; cursor: pointer; }
 .remove-button:hover { color: var(--danger); }
 .remove-button svg { width: 17px; }
@@ -212,7 +214,7 @@ svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round
   .session-item { grid-template-columns: 1fr auto; }
   .session-item-body { grid-template-columns: 62px 1fr; gap: 11px; }
   .session-thumb { width: 62px; height: 62px; }
-  .mini-field input { width: 68px; }
+  .mini-field input { width: 96px; }
   .modal-card { padding: 22px; }
 }
 

@@ -4,10 +4,10 @@ Une application web minimaliste pour organiser ses séances de musculation autou
 
 ## Fonctionnalités
 
-- choix d’un muscle focus et d’un objectif de séries hebdomadaires ;
+- choix d’un muscle focus et d’un objectif d’exercices hebdomadaires ;
 - suggestions renouvelables qui privilégient le focus et évitent les répétitions dans la semaine ;
 - bibliothèque de 32 exercices filtrable par muscle ;
-- séance libre avec séries, répétitions et charge ;
+- séance libre avec répétitions, charge maximale et suivi automatique du dernier PR ;
 - historique et progression de la semaine ;
 - sauvegarde locale dans le navigateur (`localStorage`) ;
 - interface responsive, sans compte ni backend.
