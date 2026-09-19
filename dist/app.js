@@ -1,38 +1,38 @@
 const EXERCISES = [
-  { id: "bench-press", name: "Développé couché", muscle: "Pectoraux", pattern: "Poussée horizontale", equipment: "Barre", level: "Intermédiaire" },
-  { id: "incline-dumbbell", name: "Développé incliné haltères", muscle: "Pectoraux", pattern: "Poussée inclinée", equipment: "Haltères", level: "Intermédiaire" },
-  { id: "push-up", name: "Pompes", muscle: "Pectoraux", pattern: "Poids du corps", equipment: "Sans matériel", level: "Débutant" },
-  { id: "cable-fly", name: "Écarté à la poulie", muscle: "Pectoraux", pattern: "Adduction", equipment: "Poulie", level: "Intermédiaire" },
-  { id: "dip-chest", name: "Dips buste penché", muscle: "Pectoraux", pattern: "Poussée verticale", equipment: "Barres parallèles", level: "Avancé" },
-  { id: "pull-up", name: "Tractions pronation", muscle: "Dos", pattern: "Tirage vertical", equipment: "Barre de traction", level: "Intermédiaire" },
-  { id: "lat-pulldown", name: "Tirage vertical", muscle: "Dos", pattern: "Tirage vertical", equipment: "Poulie", level: "Débutant" },
-  { id: "barbell-row", name: "Rowing barre", muscle: "Dos", pattern: "Tirage horizontal", equipment: "Barre", level: "Intermédiaire" },
-  { id: "one-arm-row", name: "Rowing unilatéral", muscle: "Dos", pattern: "Tirage unilatéral", equipment: "Haltère", level: "Débutant" },
-  { id: "seated-row", name: "Rowing assis à la poulie", muscle: "Dos", pattern: "Tirage horizontal", equipment: "Poulie", level: "Débutant" },
-  { id: "back-extension", name: "Extensions lombaires", muscle: "Dos", pattern: "Extension du tronc", equipment: "Banc", level: "Débutant" },
-  { id: "back-squat", name: "Squat arrière", muscle: "Quadriceps", pattern: "Flexion de genou", equipment: "Barre", level: "Intermédiaire" },
-  { id: "goblet-squat", name: "Goblet squat", muscle: "Quadriceps", pattern: "Flexion de genou", equipment: "Haltère", level: "Débutant" },
-  { id: "split-squat", name: "Fente bulgare", muscle: "Quadriceps", pattern: "Unilatéral", equipment: "Haltères", level: "Intermédiaire" },
-  { id: "leg-press", name: "Presse à cuisses", muscle: "Quadriceps", pattern: "Flexion de genou", equipment: "Machine", level: "Débutant" },
-  { id: "leg-extension", name: "Extension de jambes", muscle: "Quadriceps", pattern: "Isolation", equipment: "Machine", level: "Débutant" },
-  { id: "romanian-deadlift", name: "Soulevé de terre roumain", muscle: "Ischio-jambiers", pattern: "Charnière de hanche", equipment: "Barre", level: "Intermédiaire" },
-  { id: "leg-curl", name: "Leg curl", muscle: "Ischio-jambiers", pattern: "Flexion de genou", equipment: "Machine", level: "Débutant" },
-  { id: "single-rdl", name: "Soulevé de terre une jambe", muscle: "Ischio-jambiers", pattern: "Charnière unilatérale", equipment: "Haltère", level: "Intermédiaire" },
-  { id: "hip-thrust", name: "Hip thrust", muscle: "Fessiers", pattern: "Extension de hanche", equipment: "Barre", level: "Débutant" },
-  { id: "walking-lunge", name: "Fentes marchées", muscle: "Fessiers", pattern: "Unilatéral", equipment: "Haltères", level: "Intermédiaire" },
-  { id: "cable-kickback", name: "Extension de hanche à la poulie", muscle: "Fessiers", pattern: "Isolation", equipment: "Poulie", level: "Débutant" },
-  { id: "overhead-press", name: "Développé militaire", muscle: "Épaules", pattern: "Poussée verticale", equipment: "Barre", level: "Intermédiaire" },
-  { id: "lateral-raise", name: "Élévations latérales", muscle: "Épaules", pattern: "Abduction", equipment: "Haltères", level: "Débutant" },
-  { id: "face-pull", name: "Face pull", muscle: "Épaules", pattern: "Tirage haut", equipment: "Poulie", level: "Débutant" },
-  { id: "rear-delt-fly", name: "Oiseau aux haltères", muscle: "Épaules", pattern: "Abduction horizontale", equipment: "Haltères", level: "Débutant" },
-  { id: "barbell-curl", name: "Curl barre", muscle: "Bras", pattern: "Flexion du coude", equipment: "Barre", level: "Débutant" },
-  { id: "hammer-curl", name: "Curl marteau", muscle: "Bras", pattern: "Flexion neutre", equipment: "Haltères", level: "Débutant" },
-  { id: "triceps-pushdown", name: "Extension triceps à la poulie", muscle: "Bras", pattern: "Extension du coude", equipment: "Poulie", level: "Débutant" },
-  { id: "close-grip-bench", name: "Développé couché prise serrée", muscle: "Bras", pattern: "Poussée horizontale", equipment: "Barre", level: "Intermédiaire" },
-  { id: "plank", name: "Planche", muscle: "Abdominaux", pattern: "Anti-extension", equipment: "Sans matériel", level: "Débutant" },
-  { id: "dead-bug", name: "Dead bug", muscle: "Abdominaux", pattern: "Stabilisation", equipment: "Sans matériel", level: "Débutant" },
-  { id: "pallof-press", name: "Pallof press", muscle: "Abdominaux", pattern: "Anti-rotation", equipment: "Poulie", level: "Débutant" },
-  { id: "farmers-carry", name: "Marche du fermier", muscle: "Corps entier", pattern: "Porté", equipment: "Haltères", level: "Intermédiaire" }
+  { id: "bench-press", name: "Développé couché", muscle: "Pectoraux", pattern: "Poussée horizontale", equipment: "Barre", level: "Intermédiaire", target: "Grand pectoral · faisceau sterno-costal", secondary: "Triceps · deltoïde antérieur" },
+  { id: "incline-dumbbell", name: "Développé incliné haltères", muscle: "Pectoraux", pattern: "Poussée inclinée", equipment: "Haltères", level: "Intermédiaire", target: "Grand pectoral · faisceau claviculaire", secondary: "Deltoïde antérieur · triceps" },
+  { id: "push-up", name: "Pompes", muscle: "Pectoraux", pattern: "Poids du corps", equipment: "Sans matériel", level: "Débutant", target: "Grand pectoral · faisceau sterno-costal", secondary: "Triceps · deltoïde antérieur · dentelé antérieur" },
+  { id: "cable-fly", name: "Écarté à la poulie", muscle: "Pectoraux", pattern: "Adduction", equipment: "Poulie", level: "Intermédiaire", target: "Grand pectoral · faisceau sterno-costal", secondary: "Faisceau claviculaire · deltoïde antérieur" },
+  { id: "dip-chest", name: "Dips buste penché", muscle: "Pectoraux", pattern: "Poussée verticale", equipment: "Barres parallèles", level: "Avancé", target: "Grand pectoral · fibres sterno-costales inférieures", secondary: "Triceps · deltoïde antérieur" },
+  { id: "pull-up", name: "Tractions pronation", muscle: "Dos", pattern: "Tirage vertical", equipment: "Barre de traction", level: "Intermédiaire", target: "Grand dorsal · grand rond", secondary: "Biceps · trapèze inférieur · rhomboïdes" },
+  { id: "lat-pulldown", name: "Tirage vertical", muscle: "Dos", pattern: "Tirage vertical", equipment: "Poulie", level: "Débutant", target: "Grand dorsal · grand rond", secondary: "Biceps · trapèze inférieur · rhomboïdes" },
+  { id: "barbell-row", name: "Rowing barre", muscle: "Dos", pattern: "Tirage horizontal", equipment: "Barre", level: "Intermédiaire", target: "Trapèze moyen · rhomboïdes", secondary: "Grand dorsal · deltoïde postérieur · biceps" },
+  { id: "one-arm-row", name: "Rowing unilatéral", muscle: "Dos", pattern: "Tirage unilatéral", equipment: "Haltère", level: "Débutant", target: "Grand dorsal", secondary: "Rhomboïdes · trapèze moyen · biceps" },
+  { id: "seated-row", name: "Rowing assis à la poulie", muscle: "Dos", pattern: "Tirage horizontal", equipment: "Poulie", level: "Débutant", target: "Trapèze moyen · rhomboïdes", secondary: "Grand dorsal · deltoïde postérieur · biceps" },
+  { id: "back-extension", name: "Extensions lombaires", muscle: "Dos", pattern: "Extension du tronc", equipment: "Banc", level: "Débutant", target: "Érecteurs du rachis · multifides", secondary: "Grand fessier · ischio-jambiers" },
+  { id: "back-squat", name: "Squat arrière", muscle: "Quadriceps", pattern: "Flexion de genou", equipment: "Barre", level: "Intermédiaire", target: "Quadriceps · vastes médial, latéral et intermédiaire", secondary: "Grand fessier · adducteur magnus · droit fémoral" },
+  { id: "goblet-squat", name: "Goblet squat", muscle: "Quadriceps", pattern: "Flexion de genou", equipment: "Haltère", level: "Débutant", target: "Quadriceps · vastes médial et latéral", secondary: "Grand fessier · adducteur magnus · sangle abdominale" },
+  { id: "split-squat", name: "Fente bulgare", muscle: "Quadriceps", pattern: "Unilatéral", equipment: "Haltères", level: "Intermédiaire", target: "Quadriceps · vastes médial et latéral", secondary: "Grand fessier · moyen fessier · adducteurs" },
+  { id: "leg-press", name: "Presse à cuisses", muscle: "Quadriceps", pattern: "Flexion de genou", equipment: "Machine", level: "Débutant", target: "Quadriceps · vastes médial et latéral", secondary: "Droit fémoral · grand fessier · adducteur magnus" },
+  { id: "leg-extension", name: "Extension de jambes", muscle: "Quadriceps", pattern: "Isolation", equipment: "Machine", level: "Débutant", target: "Quadriceps · droit fémoral et trois vastes", secondary: "Aucun moteur principal hors quadriceps" },
+  { id: "romanian-deadlift", name: "Soulevé de terre roumain", muscle: "Ischio-jambiers", pattern: "Charnière de hanche", equipment: "Barre", level: "Intermédiaire", target: "Ischio-jambiers · semi-tendineux et biceps fémoral", secondary: "Grand fessier · érecteurs du rachis · adducteur magnus" },
+  { id: "leg-curl", name: "Leg curl", muscle: "Ischio-jambiers", pattern: "Flexion de genou", equipment: "Machine", level: "Débutant", target: "Ischio-jambiers · biceps fémoral et semi-tendineux", secondary: "Semi-membraneux · gastrocnémiens" },
+  { id: "single-rdl", name: "Soulevé de terre une jambe", muscle: "Ischio-jambiers", pattern: "Charnière unilatérale", equipment: "Haltère", level: "Intermédiaire", target: "Ischio-jambiers · biceps fémoral", secondary: "Grand/moyen fessier · érecteurs · obliques" },
+  { id: "hip-thrust", name: "Hip thrust", muscle: "Fessiers", pattern: "Extension de hanche", equipment: "Barre", level: "Débutant", target: "Grand fessier · portions supérieure et inférieure", secondary: "Biceps fémoral · moyen fessier · quadriceps" },
+  { id: "walking-lunge", name: "Fentes marchées", muscle: "Fessiers", pattern: "Unilatéral", equipment: "Haltères", level: "Intermédiaire", target: "Grand fessier · moyen fessier", secondary: "Quadriceps · adducteur long · ischio-jambiers" },
+  { id: "cable-kickback", name: "Extension de hanche à la poulie", muscle: "Fessiers", pattern: "Isolation", equipment: "Poulie", level: "Débutant", target: "Grand fessier", secondary: "Ischio-jambiers · moyen fessier stabilisateur" },
+  { id: "overhead-press", name: "Développé militaire", muscle: "Épaules", pattern: "Poussée verticale", equipment: "Barre", level: "Intermédiaire", target: "Deltoïde antérieur · deltoïde moyen", secondary: "Triceps · trapèze supérieur · dentelé antérieur" },
+  { id: "lateral-raise", name: "Élévations latérales", muscle: "Épaules", pattern: "Abduction", equipment: "Haltères", level: "Débutant", target: "Deltoïde moyen", secondary: "Supra-épineux · trapèze supérieur" },
+  { id: "face-pull", name: "Face pull", muscle: "Épaules", pattern: "Tirage haut", equipment: "Poulie", level: "Débutant", target: "Deltoïde postérieur · infra-épineux · petit rond", secondary: "Trapèze moyen · rhomboïdes" },
+  { id: "rear-delt-fly", name: "Oiseau aux haltères", muscle: "Épaules", pattern: "Abduction horizontale", equipment: "Haltères", level: "Débutant", target: "Deltoïde postérieur", secondary: "Trapèze moyen · rhomboïdes · infra-épineux" },
+  { id: "barbell-curl", name: "Curl barre", muscle: "Bras", pattern: "Flexion du coude", equipment: "Barre", level: "Débutant", target: "Biceps brachial · chefs long et court", secondary: "Brachial · brachio-radial" },
+  { id: "hammer-curl", name: "Curl marteau", muscle: "Bras", pattern: "Flexion neutre", equipment: "Haltères", level: "Débutant", target: "Brachial · brachio-radial", secondary: "Biceps brachial" },
+  { id: "triceps-pushdown", name: "Extension triceps à la poulie", muscle: "Bras", pattern: "Extension du coude", equipment: "Poulie", level: "Débutant", target: "Triceps · chefs latéral et médial", secondary: "Chef long du triceps · anconé" },
+  { id: "close-grip-bench", name: "Développé couché prise serrée", muscle: "Bras", pattern: "Poussée horizontale", equipment: "Barre", level: "Intermédiaire", target: "Triceps brachial · trois chefs", secondary: "Grand pectoral · deltoïde antérieur" },
+  { id: "plank", name: "Planche", muscle: "Abdominaux", pattern: "Anti-extension", equipment: "Sans matériel", level: "Débutant", target: "Droit de l’abdomen · obliques internes et externes", secondary: "Transverse · multifides · grand fessier" },
+  { id: "dead-bug", name: "Dead bug", muscle: "Abdominaux", pattern: "Stabilisation", equipment: "Sans matériel", level: "Débutant", target: "Droit de l’abdomen · obliques (anti-extension)", secondary: "Transverse · fléchisseurs de hanche" },
+  { id: "pallof-press", name: "Pallof press", muscle: "Abdominaux", pattern: "Anti-rotation", equipment: "Poulie", level: "Débutant", target: "Obliques internes et externes · transverse", secondary: "Droit de l’abdomen · multifides · grand fessier" },
+  { id: "farmers-carry", name: "Marche du fermier", muscle: "Corps entier", pattern: "Porté", equipment: "Haltères", level: "Intermédiaire", target: "Prise/avant-bras · trapèze supérieur", secondary: "Droit abdominal · obliques · longissimus · multifides" }
 ];
 
 const MUSCLES = ["Pectoraux", "Dos", "Quadriceps", "Ischio-jambiers", "Fessiers", "Épaules", "Bras", "Abdominaux"];
@@ -67,6 +67,7 @@ function loadState() {
       saved.trackingMode = "pr";
       saved.activeSession = (saved.activeSession || []).map(({ sets, ...item }) => ({ ...item, reps: parseInt(item.reps, 10) || 8, weight: item.weight || "" }));
     }
+    saved.activeSession = (saved.activeSession || []).map((item) => ({ ...EXERCISES.find((exercise) => exercise.id === item.id), ...item }));
     return saved;
   }
   catch { return { ...DEFAULT_STATE }; }
@@ -147,6 +148,7 @@ function renderSession() {
         <img class="session-thumb" src="assets/exercises/${item.id}.jpg" alt="Illustration : ${item.name}" loading="lazy">
         <div>
           <div class="session-item-title"><strong>${item.name}</strong><span class="muscle-tag">${item.muscle}</span></div>
+          <div class="anatomy-detail"><span><b>CIBLE</b>${item.target}</span><span><b>SECONDAIRES</b>${item.secondary}</span></div>
           <div class="set-controls">
             <label class="mini-field">RÉPÉTITIONS<input data-field="reps" type="number" min="1" max="100" step="1" value="${item.reps}" placeholder="8"></label>
             <label class="mini-field">CHARGE MAX KG<input data-field="weight" type="number" min="0" step="0.5" value="${item.weight}" placeholder="0"></label>
@@ -180,7 +182,7 @@ function renderSuggestions() {
   els.suggestions.innerHTML = list.map((item, index) => `
     <article class="suggestion-card">
       <div class="exercise-thumb-wrap"><img src="assets/exercises/${item.id}.jpg" alt="" loading="lazy"><span>0${index + 1}</span></div>
-      <div><strong>${item.name}</strong><small>${item.muscle} · ${item.pattern}</small></div>
+      <div><strong>${item.name}</strong><small class="anatomy-target">${item.target}</small><small>${item.muscle} · ${item.pattern}</small></div>
       <button class="add-button" data-add="${item.id}" aria-label="Ajouter ${item.name}">+</button>
     </article>`).join("");
 }
@@ -236,7 +238,7 @@ function renderSessionBuilder() {
   const movements = EXERCISES.filter((exercise) => exercise.muscle === selectedSessionMuscle);
   els.movementOptions.innerHTML = movements.map((exercise) => {
     const isAdded = activeIds.includes(exercise.id);
-    return `<article class="movement-option${isAdded ? " is-added" : ""}"><img src="assets/exercises/${exercise.id}.jpg" alt="Illustration : ${exercise.name}" loading="lazy"><div><strong>${exercise.name}</strong><small>${exercise.pattern} · ${exercise.equipment} · ${exercise.level}</small></div><button class="add-button" data-builder-add="${exercise.id}" aria-label="${isAdded ? `${exercise.name} déjà ajouté` : `Ajouter ${exercise.name}`}"${isAdded ? " disabled" : ""}>${isAdded ? "✓" : "+"}</button></article>`;
+    return `<article class="movement-option${isAdded ? " is-added" : ""}"><img src="assets/exercises/${exercise.id}.jpg" alt="Illustration : ${exercise.name}" loading="lazy"><div><strong>${exercise.name}</strong><small class="anatomy-target"><b>Cible</b> ${exercise.target}</small><small class="anatomy-secondary"><b>Secondaires</b> ${exercise.secondary}</small><small>${exercise.pattern} · ${exercise.equipment} · ${exercise.level}</small></div><button class="add-button" data-builder-add="${exercise.id}" aria-label="${isAdded ? `${exercise.name} déjà ajouté` : `Ajouter ${exercise.name}`}"${isAdded ? " disabled" : ""}>${isAdded ? "✓" : "+"}</button></article>`;
   }).join("");
 }
 
@@ -246,8 +248,8 @@ function renderFocusOptions() {
 
 function renderLibrary() {
   const query = els.search.value.trim().toLocaleLowerCase("fr");
-  const results = EXERCISES.filter((item) => (libraryFilter === "Tous" || item.muscle === libraryFilter) && `${item.name} ${item.muscle} ${item.equipment}`.toLocaleLowerCase("fr").includes(query));
-  els.libraryList.innerHTML = results.map((item) => `<article class="library-item"><img src="assets/exercises/${item.id}.jpg" alt="Illustration : ${item.name}" loading="lazy"><div><strong>${item.name}</strong><small>${item.muscle} · ${item.equipment} · ${item.level}</small></div><button class="add-button" data-add="${item.id}" aria-label="Ajouter ${item.name}">+</button></article>`).join("") || `<p class="modal-intro">Aucun exercice ne correspond à cette recherche.</p>`;
+  const results = EXERCISES.filter((item) => (libraryFilter === "Tous" || item.muscle === libraryFilter) && `${item.name} ${item.muscle} ${item.equipment} ${item.target} ${item.secondary}`.toLocaleLowerCase("fr").includes(query));
+  els.libraryList.innerHTML = results.map((item) => `<article class="library-item"><img src="assets/exercises/${item.id}.jpg" alt="Illustration : ${item.name}" loading="lazy"><div><strong>${item.name}</strong><small class="anatomy-target"><b>Cible</b> ${item.target}</small><small class="anatomy-secondary"><b>Secondaires</b> ${item.secondary}</small><small>${item.muscle} · ${item.equipment} · ${item.level}</small></div><button class="add-button" data-add="${item.id}" aria-label="Ajouter ${item.name}">+</button></article>`).join("") || `<p class="modal-intro">Aucun exercice ne correspond à cette recherche.</p>`;
 }
 
 function renderFilters() {
